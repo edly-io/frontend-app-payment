@@ -31,11 +31,13 @@ import { handleErrors, handleMessages, clearMessages } from '../../feedback';
 import * as PaymentApiService from './service';
 import { checkoutWithToken } from '../payment-methods/cybersource';
 import { checkout as checkoutPaypal } from '../payment-methods/paypal';
+import { checkout as checkoutAuthorizenet } from '../payment-methods/authorizenet';
 import { checkout as checkoutApplePay } from '../payment-methods/apple-pay';
 
 export const paymentMethods = {
   cybersource: checkoutWithToken,
   paypal: checkoutPaypal,
+  authorizenet: checkoutAuthorizenet,
   'apple-pay': checkoutApplePay,
 };
 
