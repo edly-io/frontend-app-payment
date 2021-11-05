@@ -13,9 +13,22 @@ import AcceptedCardLogos from './assets/accepted-card-logos.png';
 import PaymentForm from './payment-form/PaymentForm';
 import FreeCheckoutOrderButton from './FreeCheckoutOrderButton';
 import { PayPalButton } from '../payment-methods/paypal';
+import { AuthorizenetButton } from '../payment-methods/authorizenet';
 import { ORDER_TYPES } from '../data/constants';
 
 class Checkout extends React.Component {
+  handleSubmitAuthorizenet = () => {
+    // TO DO: after event parity, track data should be
+    // sent only if the payment is processed, not on click
+    // Check for ApplePay and Free Basket as well
+    sendTrackEvent(
+      'edx.bi.ecommerce.basket.payment_selected',
+      { type: 'click', category: 'checkout', paymentMethod: 'Authorizenet' },
+    );
+
+    this.props.submitPayment({ method: 'authorizenet' });
+  }
+
   handleSubmitPayPal = () => {
     // TO DO: after event parity, track data should be
     // sent only if the payment is processed, not on click
@@ -89,6 +102,8 @@ class Checkout extends React.Component {
     // istanbul ignore next
     const payPalIsSubmitting = submitting && paymentMethod === 'paypal';
     // istanbul ignore next
+    const authorizenetIsSubmitting = submitting && paymentMethod === 'authorizenet';
+    // istanbul ignore next
     const cybersourceIsSubmitting = submitting && paymentMethod === 'cybersource';
 
     if (isFreeBasket) {
@@ -124,6 +139,12 @@ class Checkout extends React.Component {
               className={classNames('payment-method-button', { 'skeleton-pulse': loading })}
               disabled={submissionDisabled}
               isProcessing={payPalIsSubmitting}
+            />
+            <AuthorizenetButton
+              onClick={this.handleSubmitAuthorizenet}
+              className={classNames('payment-method-button', { 'skeleton-pulse': loading })}
+              disabled={submissionDisabled}
+              isProcessing={authorizenetIsSubmitting}
             />
 
             {/* Apple Pay temporarily disabled per REV-927  - https://github.com/edx/frontend-app-payment/pull/256 */}
@@ -165,7 +186,7 @@ Checkout.propTypes = {
   isFreeBasket: PropTypes.bool,
   submitting: PropTypes.bool,
   isBasketProcessing: PropTypes.bool,
-  paymentMethod: PropTypes.oneOf(['paypal', 'apple-pay', 'cybersource']),
+  paymentMethod: PropTypes.oneOf(['paypal', 'apple-pay', 'cybersource', 'authorizenet']),
   orderType: PropTypes.oneOf(Object.values(ORDER_TYPES)),
 };
 
