@@ -7,11 +7,11 @@ import { generateAndSubmitForm } from '../../data/utils';
 ensureConfig(['ECOMMERCE_BASE_URL'], 'PayPal API service');
 
 /**
- * Checkout with PayPal
+ * Checkout with Authorizenet
  *
  * 1. Send the basket_id and payment_processor to our /api/v2/checkout/
- * 2. Receive a paypal url
- * 3. Generate an submit an empty form to the paypal url
+ * 2. Receive a Authorizenet url and Token in Parameter Form Data
+ * 3. Generate an submit an Tokenzing form to Authorizenet Url
  */
 export default async function checkout(basket) {
   const { basketId } = basket;
